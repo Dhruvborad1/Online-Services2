@@ -12,7 +12,11 @@
         <h1>All Listings</h1>
         <button onclick="editAllListings()" class="bt1">Edit All Listings</button>
         <div id="listings"></div>
-        <a href="index.html"><button onclick="location.href='add_listing.html'" class="bt1">Add Another Listing</button></a>
+        <div id="totalPrice"></div> <!-- Added total price section -->
+
+        <a href="index.html">
+            <button onclick="location.href='add_listing.html'" class="bt1">Add Another Listing</button>
+        </a>
     </div>
     <script src="view_script.js"></script>
     
@@ -53,7 +57,6 @@ h1 {
 .listing:hover {
     transform: scale(1.02);
     background: #8db7e4;
-
 }
 
 .bt1 {
@@ -98,17 +101,27 @@ h1 {
 .delete-button:hover {
     background-color: #c82333;
 }
+
 img {
     border: 1px solid #ddd;
     border-radius: 4px;
     padding: 5px;
     width: 150px;
-  }
+}
+
+#totalPrice {
+    margin-top: 20px;
+    font-size: 20px;
+    font-weight: bold;
+    color: #333;
+}
 </style>
 <script>
 window.onload = function() {
     const listings = JSON.parse(localStorage.getItem('listings')) || [];
     const listingsContainer = document.getElementById('listings');
+    const totalPriceContainer = document.getElementById('totalPrice');
+    let totalSum = 0;
 
     if (listings.length === 0) {
         listingsContainer.innerHTML = '<p>No listings available.</p>';
@@ -117,7 +130,7 @@ window.onload = function() {
             const listingDiv = document.createElement('div');
             listingDiv.className = 'listing';
             listingDiv.innerHTML = `
-                <img src="${listing.file}" alt="Paris" style="width:150px">
+                <img src="${listing.file}" alt="Listing Image" style="width:150px">
                 <h3>${listing.title}</h3>
                 <p>${listing.description}</p>
                 <p><strong>Price: $${listing.price}</strong></p>
@@ -125,7 +138,13 @@ window.onload = function() {
                 <button class="delete-button" onclick="deleteListing(${index})">Delete</button>
             `;
             listingsContainer.appendChild(listingDiv);
+
+            // Sum up the prices
+            totalSum += parseFloat(listing.price);
         });
+
+        // Display total price
+        totalPriceContainer.innerHTML = `Total Price: $${totalSum.toFixed(2)}`;
     }
 };
 
