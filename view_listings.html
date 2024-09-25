@@ -10,9 +10,17 @@
     
     <div id="listingContainer">
         <h1>All Listings</h1>
+
         <button onclick="editAllListings()" class="bt1">Edit All Listings</button>
+
         <div id="listings"></div>
-        <div id="totalPrice"></div> <!-- Added total price section -->
+
+    <table class="t2">
+        <tr>   
+            <td><br><b><div id="totalQuantity" class="m1"></div></b></td> 
+            <td><div id="totalPrice" class="m1"></div></td> 
+        </tr>
+    </table>
 
         <a href="index.html">
             <button onclick="location.href='add_listing.html'" class="bt1">Add Another Listing</button>
@@ -22,6 +30,7 @@
     
 </body>
 <style>
+  
 body {
     display: flex;
     justify-content: center;
@@ -51,6 +60,7 @@ h1 {
     margin: 10px 0;
     border-radius: 8px;
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    position: relative; /* Added for positioning the number */
     transition: transform 0.2s;
 }
 
@@ -75,38 +85,12 @@ h1 {
     background-color: #0056b3;
 }
 
-.edit-button, .delete-button {
-    margin-top: 10px;
-    margin-right: 5px;
-    padding: 8px 12px;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-}
-
-.edit-button {
-    background-color: #ffc107;
-    color: white;
-}
-
-.delete-button {
-    background-color: #dc3545;
-    color: white;
-}
-
-.edit-button:hover {
-    background-color: #e0a800;
-}
-
-.delete-button:hover {
-    background-color: #c82333;
-}
-
 img {
     border: 1px solid #ddd;
     border-radius: 4px;
     padding: 5px;
     width: 150px;
+    
 }
 
 #totalPrice {
@@ -115,79 +99,279 @@ img {
     font-weight: bold;
     color: #333;
 }
+
+.t1 {
+    width: 90%;
+    border-collapse: collapse;
+    margin: 20px auto;
+    font-family: Arial, sans-serif;
+    background-color: #f9f9f9;
+    text-align: left;
+}
+
+/* Table borders */
+.t1 td, .t1 th {
+    border: 1px solid #ddd;
+    padding: 10px;
+}
+
+/* Header row */
+.t1 tr:nth-child(1) td {
+    font-weight: bold;
+    background-color: #f2f2f2;
+    text-align: left;
+}
+
+/* Alternate row colors */
+.t1 tr:nth-child(even) {
+    background-color: #f4f4f4;
+}
+
+/* Hover effect on rows */
+.t1 tr:hover {
+    background-color: #e0f7fa;
+}
+
+/* Item title styling */
+.t1 h3 {
+    margin: 0;
+    font-size: 18px;
+    color: #333;
+}
+
+/* Quantity and Price text styling */
+.t1 p {
+    margin: 0;
+    font-size: 16px;
+}
+
+/* Price styling */
+.t1 p strong {
+    color: #d32f2f;
+    font-size: 18px;
+}
+
+.tdimg {
+    width: 20%;
+}
+
+.t2{
+
+    width: 100%;
+    height: 2px;
+}
+
+.t2 tr td{
+    padding: 1px;
+    width: 49%;    
+    border-radius: 5px;
+    background: #9cbfe4;
+    transition: 0.2s;
+}
+
+.m1{
+    text-align: center;
+    font-size: 20px;
+}
+
+/* Button styles */
+.edit-button, .delete-button {
+    padding: 8px 15px;
+    font-size: 14px;
+    cursor: pointer;
+    border: none;
+    border-radius: 5px;
+    width: 35%;
+    height: 40px;
+}
+
+.edit-button {
+    background-color: #0288d1;
+    color: white;
+}
+
+.edit-button:hover {
+    background-color: #0277bd;
+}
+
+.delete-button {
+    background-color: #d32f2f;
+    color: white;
+}
+
+.delete-button:hover {
+    background-color: #c62828;
+}
+
+/* Number badge styling */
+.listing-number {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    background-color: #ff5722;
+    color: white;
+    border-radius: 50%;
+    width: 30px;
+    height: 30px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 16px;
+    font-weight: bold;
+}
+
+@media (max-width: 530px) {
+    .t1 {
+        width: 90%;
+         /* Increase table width on smaller screens */
+    }
+
+    .t1 td {
+        display: block;
+        width: 100%;
+        box-sizing: border-box;
+        text-align: left;
+        border: none;
+        padding: 8px;
+        
+    }
+
+    .t1 tr {
+        display: block;
+        margin-bottom: 10px;
+        border-bottom: 2px solid #ddd;
+    }
+
+    .t1 tr:nth-child(even) {
+        background-color: transparent; /* Remove alternate row color */
+    }
+
+    /* Center buttons and set full width on small screens */
+    .edit-button, .delete-button {
+        width: 100%;
+        margin-top: 10px;
+    }
+
+    /* Adjust image width on mobile */
+    .t1 img {
+        width: 100%; /* Make the image responsive */
+        height: auto;
+        margin: 10px 0;
+    }
+}
 </style>
 <script>
-window.onload = function() {
-    const listings = JSON.parse(localStorage.getItem('listings')) || [];
-    const listingsContainer = document.getElementById('listings');
-    const totalPriceContainer = document.getElementById('totalPrice');
-    let totalSum = 0;
 
-    if (listings.length === 0) {
-        listingsContainer.innerHTML = '<p>No listings available.</p>';
-    } else {
-        listings.forEach((listing, index) => {
-            const listingDiv = document.createElement('div');
-            listingDiv.className = 'listing';
-            listingDiv.innerHTML = `
-                <img src="${listing.file}" alt="Listing Image" style="width:150px">
-                <h3>${listing.title}</h3>
-                <p>${listing.description}</p>
-                <p><strong>Price: $${listing.price}</strong></p>
-                <button class="edit-button" onclick="editListing(${index})">Edit</button>
-                <button class="delete-button" onclick="deleteListing(${index})">Delete</button>
-            `;
-            listingsContainer.appendChild(listingDiv);
 
-            // Sum up the prices
-            totalSum += parseFloat(listing.price);
-        });
+    
+    window.onload = function() {
+        const listings = JSON.parse(localStorage.getItem('listings')) || [];
+        const listingsContainer = document.getElementById('listings');
+        const totalPriceContainer = document.getElementById('totalPrice');
+        const totalQuantityContainer = document.getElementById('totalQuantity'); // Added totalQuantity div
+        let totalSum = 0;
+        let totalQuantity = 0; // Variable to hold the total quantity
+    
+        if (listings.length === 0) {
+            listingsContainer.innerHTML = '<p>No listings available.</p>';
+        } else {
+            listings.forEach((listing, index) => {
+                const listingDiv = document.createElement('div');
+                listingDiv.className = 'listing';
+    
+                // Parse the quantity and price values
+                const quantity = parseFloat(listing.description); // Assuming description holds the quantity
+                const pricePerUnit = parseFloat(listing.price);
+                const totalListingPrice = quantity * pricePerUnit;
+    
+                listingDiv.innerHTML = `
+                <div class="listing-number">${index + 1}</div>
+    
+                <table border="1px" class="t1">
+                    <tr>
+                        <td rowspan="5" class="tdimg"><center><img src="${listing.file}" alt="Listing Image" style="width:150px"></center></td>
+                        <td>Item Name:</td>
+                        <td><h3>${listing.title}</h3></td>
+                    </tr>
+                    <tr>
+                        <td>Quantity:</td>
+                        <td><p>${quantity}</p></td>
+                    </tr>
+                    <tr>
+                        <td>Price(1pcs):</td>
+                        <td><p><strong>$${pricePerUnit.toFixed(2)}</strong></p></td>
+                    </tr>
+                    <tr>
+                        <td>Price:</td>
+                        <td class="td2"><p><strong>$${totalListingPrice.toFixed(2)}</strong></p></td> <!-- Display total price here -->
+                    </tr>
+                    <tr>
+                        <td colspan="2"><center>
+                            <button class="edit-button" onclick="editListing(${index})">Edit</button>
+                            <button class="delete-button" onclick="deleteListing(${index})">Delete</button>
+                        </center></td>
+                    </tr>
+                </table>
+                `;
+    
+                listingsContainer.appendChild(listingDiv);
+    
+                // Sum up the total prices and quantities
+                totalSum += totalListingPrice;
+                totalQuantity += quantity; // Add quantity to totalQuantity
+            });
+    
+            // Display the total price of all listings
+            totalPriceContainer.innerHTML = `Total Price: $${totalSum.toFixed(2)}`;
+    
+            // Display the total quantity of all listings
+            totalQuantityContainer.innerHTML = `Total Quantity: ${totalQuantity}`;
+        }
+    };
 
-        // Display total price
-        totalPriceContainer.innerHTML = `Total Price: $${totalSum.toFixed(2)}`;
+    
+    function editListing(index) {
+        const listings = JSON.parse(localStorage.getItem('listings'));
+        const listing = listings[index];
+    
+        const file = prompt("Edit Img:", listing.file);
+        const title = prompt("Edit Title:", listing.title);
+        const description = prompt("Edit Quantity:", listing.description);
+        const price = prompt("Edit Price(1pcs):", listing.price);
+    
+        if (file !== null && title !== null && description !== null && price !== null) {
+            listings[index] = { file, title, description, price };
+            localStorage.setItem('listings', JSON.stringify(listings));
+            location.reload(); // Refresh to show updated listings
+        }
     }
-};
-
-function editListing(index) {
-    const listings = JSON.parse(localStorage.getItem('listings'));
-    const listing = listings[index];
-
-    const file = prompt("Edit Img:", listing.file);
-    const title = prompt("Edit Title:", listing.title);
-    const description = prompt("Edit Description:", listing.description);
-    const price = prompt("Edit Price:", listing.price);
-
-    if (file !== null && title !== null && description !== null && price !== null) {
-        listings[index] = { file, title, description, price };
+    
+    function deleteListing(index) {
+        const listings = JSON.parse(localStorage.getItem('listings'));
+        listings.splice(index, 1); // Remove listing at index
         localStorage.setItem('listings', JSON.stringify(listings));
         location.reload(); // Refresh to show updated listings
     }
-}
-
-function deleteListing(index) {
-    const listings = JSON.parse(localStorage.getItem('listings'));
-    listings.splice(index, 1); // Remove listing at index
-    localStorage.setItem('listings', JSON.stringify(listings));
-    location.reload(); // Refresh to show updated listings
-}
-
-function editAllListings() {
-    const listings = JSON.parse(localStorage.getItem('listings'));
     
-    listings.forEach((listing, index) => {
-
-        const file = prompt(`Edit Img for ${listing.file}:`, listing.file);
-        const title = prompt(`Edit Title for ${listing.title}:`, listing.title);
-        const description = prompt(`Edit Description for ${listing.title}:`, listing.description);
-        const price = prompt(`Edit Price for ${listing.title}:`, listing.price);
-
-        if (file !== null && title !== null && description !== null && price !== null) {
-            listings[index] = { file, title, description, price };
-        }
-    });
-
-    localStorage.setItem('listings', JSON.stringify(listings));
-    location.reload(); // Refresh to show updated listings
-}
+    function editAllListings() {
+        const listings = JSON.parse(localStorage.getItem('listings'));
+        
+        listings.forEach((listing, index) => {
+    
+            const file = prompt(`Edit Img for ${listing.file}:`, listing.file);
+            const title = prompt(`Edit Title for ${listing.title}:`, listing.title);
+            const description = prompt(`Edit Quantity for ${listing.title}:`, listing.description);
+            const price = prompt(`Edit Price(1pcs) for ${listing.title}:`, listing.price);
+    
+            if (file !== null && title !== null && description !== null && price !== null) {
+                listings[index] = { file, title, description, price };
+            }
+        });
+    
+        localStorage.setItem('listings', JSON.stringify(listings));
+        location.reload(); // Refresh to show updated listings
+    }
+    
 </script>
 </html>
+
