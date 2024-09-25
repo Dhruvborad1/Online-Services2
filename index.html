@@ -10,25 +10,26 @@
     <div id="listingForm">
         <h1>Add Listing</h1>
         <form id="addListing">
-            <label for="title">Title:</label>
+            <label for="title">Item Name:</label>
             <input type="text" id="title" required>
 
-            <label for="description">Description:</label>
-            <textarea id="description" required></textarea>
+            <label for="description">Quantity:</label>
+            <input type="number" id="description" required>
 
-            <label for="price">Price:</label>
+            <label for="price">Price(1pcs):</label>
             <input type="number" id="price" required>
 
-            <label>Enter File</label>
+            <label>Enter File:</label>
             <input type="url" id="file" required>
             
             <button type="submit" class="bt1">Add Listing</button>
         </form>
-        <button class="bt1"><a href="view_listings.html">view</a></button>
+        <button class="bt1"><a href="file:///C:/Users/DELL/OneDrive/Desktop/New%20folder%20(2)/view_listings.html">view</a></button>
     </div>
     <script src="script.js"></script>
 </body>
 <style>
+
 body {
     display: flex;
     justify-content: center;
@@ -74,12 +75,11 @@ input, textarea {
     border-radius: 5px;
 }
 
-    .bt1 a{
-    color: #ffffff;
-}
-    
 .bt1:hover {
     background-color: #0056b3;
+}
+.bt1 a{
+    color: #ffffff;
 }
 </style>
 <script>
